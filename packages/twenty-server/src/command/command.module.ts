@@ -5,6 +5,7 @@ import { DatabaseCommandModule } from 'src/database/commands/database-command.mo
 import { FieldMetadataModule } from 'src/engine/metadata-modules/field-metadata/field-metadata.module';
 import { ObjectMetadataModule } from 'src/engine/metadata-modules/object-metadata/object-metadata.module';
 import { WorkspaceCleanerModule } from 'src/engine/workspace-manager/workspace-cleaner/workspace-cleaner.module';
+import { BicProvisioningModule } from 'src/engine/workspace-manager/bic/bic-provisioning.module';
 import { MessagingMessageCleanerModule } from 'src/modules/messaging/message-cleaner/messaging-message-cleaner.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { MessagingMessageCleanerModule } from 'src/modules/messaging/message-cle
     ObjectMetadataModule,
     FieldMetadataModule,
     WorkspaceCleanerModule,
+    BicProvisioningModule,
   ],
 })
 export class CommandModule {}

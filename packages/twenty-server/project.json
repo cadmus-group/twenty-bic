@@ -115,6 +115,14 @@
         "command": "node dist/command/command.js"
       }
     },
+    "workspace-provision-bic": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "packages/twenty-server",
+        "command": "node dist/command/command.js workspace:provision:bic"
+      }
+    },
     "worker": {
       "executor": "nx:run-commands",
       "dependsOn": ["build"],
