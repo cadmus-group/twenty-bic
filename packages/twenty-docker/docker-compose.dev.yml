@@ -5,6 +5,9 @@
 #   docker compose -f docker-compose.dev.yml up -d
 #   docker compose -f docker-compose.dev.yml down       # stop
 #   docker compose -f docker-compose.dev.yml down -v    # stop + wipe data
+#
+# Default host port is 5433 so another Postgres on 5432 does not break local dev.
+# Override: TWENTY_DEV_PG_PORT=5432 docker compose -f docker-compose.dev.yml up -d db
 
 name: twenty-dev
 
@@ -14,7 +17,7 @@ services:
     volumes:
       - dev-db-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${TWENTY_DEV_PG_PORT:-5433}:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

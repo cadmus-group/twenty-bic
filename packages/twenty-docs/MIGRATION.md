@@ -25,10 +25,10 @@
 - `<ArticleWarning>` → `<Warning>`
 - `<ArticleLink href="...">text</ArticleLink>` → `[text](...)`
 - `<ArticleEditContent>` → Removed (not needed)
+- `<ArticleTabs>` / `<ArticleTab>` → `<Tabs>` / `<Tab title="...">` (see self-host setup email section, all locales)
 
 ### Still Need Manual Review
 Some components may need additional conversion:
-- `<ArticleTabs>` - Mintlify uses `<Tabs>` component
 - Embedded iframes/videos - May need adjustment
 - Custom styled elements - Review for Mintlify compatibility
 
@@ -88,7 +88,6 @@ To deploy to Mintlify:
 
 ## Known Issues to Review
 
-- ArticleTabs components may need manual conversion
 - Some images may have incorrect paths
 - Custom styled components may need adjustment
 - Video embeds might need review

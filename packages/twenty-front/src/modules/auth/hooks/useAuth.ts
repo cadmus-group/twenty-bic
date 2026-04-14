@@ -1,9 +1,9 @@
+import { CombinedGraphQLErrors } from '@apollo/client/errors';
 import {
   useApolloClient,
   useLazyQuery,
   useMutation,
 } from '@apollo/client/react';
-import { CombinedGraphQLErrors } from '@apollo/client/errors';
 import { useCallback } from 'react';
 import { AppPath } from 'twenty-shared/types';
 
@@ -16,8 +16,8 @@ import {
   GetAuthTokensFromOtpDocument,
   GetLoginTokenFromCredentialsDocument,
   SignInDocument,
-  SignUpInWorkspaceDocument,
   SignUpDocument,
+  SignUpInWorkspaceDocument,
   VerifyEmailAndGetLoginTokenDocument,
   VerifyEmailAndGetWorkspaceAgnosticTokenDocument,
 } from '~/generated-metadata/graphql';
@@ -29,15 +29,13 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 
 import { isAppEffectRedirectEnabledState } from '@/app/states/isAppEffectRedirectEnabledState';
+import { useSignUpInNewWorkspace } from '@/auth/sign-in-up/hooks/useSignUpInNewWorkspace';
 import { availableWorkspacesState } from '@/auth/states/availableWorkspacesState';
 import { currentUserState } from '@/auth/states/currentUserState';
 import { currentUserWorkspaceState } from '@/auth/states/currentUserWorkspaceState';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMembersState';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { useSignUpInNewWorkspace } from '@/auth/sign-in-up/hooks/useSignUpInNewWorkspace';
-import { useLoadMockedMetadata } from '@/metadata-store/hooks/useLoadMockedMetadata';
-import { preloadMockedMetadata } from '@/metadata-store/utils/preloadMockedMetadata';
 import { lastAuthenticatedMethodState } from '@/auth/states/lastAuthenticatedMethodState';
 import { loginTokenState } from '@/auth/states/loginTokenState';
 import {
@@ -59,15 +57,17 @@ import { useOrigin } from '@/domain-manager/hooks/useOrigin';
 import { useRedirect } from '@/domain-manager/hooks/useRedirect';
 import { useRedirectToWorkspaceDomain } from '@/domain-manager/hooks/useRedirectToWorkspaceDomain';
 import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
+import { useLoadMockedMetadata } from '@/metadata-store/hooks/useLoadMockedMetadata';
+import { preloadMockedMetadata } from '@/metadata-store/utils/preloadMockedMetadata';
 import { useClearSseClient } from '@/sse-db-event/hooks/useClearSseClient';
 import { useLoadCurrentUser } from '@/users/hooks/useLoadCurrentUser';
 import { workspaceAuthProvidersState } from '@/workspace/states/workspaceAuthProvidersState';
 import { i18n } from '@lingui/core';
+import { useStore } from 'jotai';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SOURCE_LOCALE } from 'twenty-shared/translations';
 import { isDefined } from 'twenty-shared/utils';
 import { getWorkspaceUrl } from '~/utils/getWorkspaceUrl';
-import { useStore } from 'jotai';
 
 export const useAuth = () => {
   const store = useStore();
@@ -98,20 +98,28 @@ export const useAuth = () => {
 
   const [getLoginTokenFromCredentials] = useMutation(
     GetLoginTokenFromCredentialsDocument,
+    { errorPolicy: 'all' },
   );
-  const [signIn] = useMutation(SignInDocument);
-  const [signUp] = useMutation(SignUpDocument);
-  const [signUpInWorkspace] = useMutation(SignUpInWorkspaceDocument);
+  const [signIn] = useMutation(SignInDocument, { errorPolicy: 'all' });
+  const [signUp] = useMutation(SignUpDocument, { errorPolicy: 'all' });
+  const [signUpInWorkspace] = useMutation(SignUpInWorkspaceDocument, {
+    errorPolicy: 'all',
+  });
   const [getAuthTokensFromLoginToken] = useMutation(
     GetAuthTokensFromLoginTokenDocument,
+    { errorPolicy: 'all' },
   );
   const [verifyEmailAndGetLoginToken] = useMutation(
     VerifyEmailAndGetLoginTokenDocument,
+    { errorPolicy: 'all' },
   );
   const [verifyEmailAndGetWorkspaceAgnosticToken] = useMutation(
     VerifyEmailAndGetWorkspaceAgnosticTokenDocument,
+    { errorPolicy: 'all' },
   );
-  const [getAuthTokensFromOtp] = useMutation(GetAuthTokensFromOtpDocument);
+  const [getAuthTokensFromOtp] = useMutation(GetAuthTokensFromOtpDocument, {
+    errorPolicy: 'all',
+  });
 
   const workspacePublicData = useAtomStateValue(workspacePublicDataState);
 
@@ -333,25 +341,29 @@ export const useAuth = () => {
           getAuthTokensResult.data.getAuthTokensFromLoginToken.tokens,
         );
       } catch (error) {
-        if (
+        const subCode =
           CombinedGraphQLErrors.is(error) &&
-          error.errors[0]?.extensions?.subCode ===
-            'TWO_FACTOR_AUTHENTICATION_PROVISION_REQUIRED'
-        ) {
+          typeof error.errors[0]?.extensions?.subCode === 'string'
+            ? error.errors[0].extensions.subCode
+            : undefined;
+
+        if (subCode === 'TWO_FACTOR_AUTHENTICATION_PROVISION_REQUIRED') {
           handleSetLoginToken(loginToken);
           navigate(AppPath.SignInUp);
           setSignInUpStep(SignInUpStep.TwoFactorAuthenticationProvision);
+
+          return;
         }
 
-        if (
-          CombinedGraphQLErrors.is(error) &&
-          error.errors[0]?.extensions?.subCode ===
-            'TWO_FACTOR_AUTHENTICATION_VERIFICATION_REQUIRED'
-        ) {
+        if (subCode === 'TWO_FACTOR_AUTHENTICATION_VERIFICATION_REQUIRED') {
           handleSetLoginToken(loginToken);
           navigate(AppPath.SignInUp);
           setSignInUpStep(SignInUpStep.TwoFactorAuthenticationVerification);
+
+          return;
         }
+
+        throw error;
       }
     },
     [
@@ -366,50 +378,56 @@ export const useAuth = () => {
 
   const handleCredentialsSignIn = useCallback(
     async (email: string, password: string, captchaToken?: string) => {
-      await signIn({
+      const signInResult = await signIn({
         variables: { email, password, captchaToken },
-        onCompleted: async (data) => {
-          handleSetAuthTokens(data.signIn.tokens);
-          const { user } = await loadCurrentUser();
-
-          const availableWorkspacesCount = countAvailableWorkspaces(
-            user.availableWorkspaces,
-          );
-
-          if (availableWorkspacesCount === 0) {
-            return createWorkspace();
-          }
-
-          if (availableWorkspacesCount === 1) {
-            const targetWorkspace = getFirstAvailableWorkspaces(
-              user.availableWorkspaces,
-            );
-            return await redirectToWorkspaceDomain(
-              getWorkspaceUrl(targetWorkspace.workspaceUrls),
-              targetWorkspace.loginToken ? AppPath.Verify : AppPath.SignInUp,
-              {
-                ...(targetWorkspace.loginToken && {
-                  loginToken: targetWorkspace.loginToken,
-                }),
-                email: user.email,
-              },
-            );
-          }
-
-          setSignInUpStep(SignInUpStep.WorkspaceSelection);
-        },
-        onError: (error) => {
-          if (
-            CombinedGraphQLErrors.is(error) &&
-            error.errors[0]?.extensions?.subCode === 'EMAIL_NOT_VERIFIED'
-          ) {
-            setSearchParams({ email });
-            setSignInUpStep(SignInUpStep.EmailVerification);
-            throw error;
-          }
-          throw error;
-        },
       });
+
+      if (isDefined(signInResult.error)) {
+        if (
+          CombinedGraphQLErrors.is(signInResult.error) &&
+          signInResult.error.errors[0]?.extensions?.subCode ===
+            'EMAIL_NOT_VERIFIED'
+        ) {
+          setSearchParams({ email });
+          setSignInUpStep(SignInUpStep.EmailVerification);
+        }
+
+        throw signInResult.error;
+      }
+
+      if (!signInResult.data?.signIn) {
+        throw new Error('No signIn result');
+      }
+
+      handleSetAuthTokens(signInResult.data.signIn.tokens);
+      const { user } = await loadCurrentUser();
+
+      const availableWorkspacesCount = countAvailableWorkspaces(
+        user.availableWorkspaces,
+      );
+
+      if (availableWorkspacesCount === 0) {
+        return createWorkspace();
+      }
+
+      if (availableWorkspacesCount === 1) {
+        const targetWorkspace = getFirstAvailableWorkspaces(
+          user.availableWorkspaces,
+        );
+
+        return await redirectToWorkspaceDomain(
+          getWorkspaceUrl(targetWorkspace.workspaceUrls),
+          targetWorkspace.loginToken ? AppPath.Verify : AppPath.SignInUp,
+          {
+            ...(targetWorkspace.loginToken && {
+              loginToken: targetWorkspace.loginToken,
+            }),
+            email: user.email,
+          },
+        );
+      }
+
+      setSignInUpStep(SignInUpStep.WorkspaceSelection);
     },
     [
       handleSetAuthTokens,

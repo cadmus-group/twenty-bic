@@ -190,7 +190,11 @@ You should run all commands in the following steps from the root of the project.
   </Tab>
 </Tabs>
 
-You can now access the database at `localhost:5432`.
+With **Twenty’s** `packages/twenty-docker/docker-compose.dev.yml`, Postgres is published on **`localhost:5433`** by default (so it does not clash with another Postgres on `5432`). Set `PG_DATABASE_URL` in `packages/twenty-server/.env` to use that port (see `.env.example`).
+
+<Warning>
+If you still see `password authentication failed for user "postgres"`, your `PG_DATABASE_URL` host/port does not match the running container. Run `bash packages/twenty-utils/setup-dev-env.sh` to align `localhost` URLs with `TWENTY_DEV_PG_PORT`, or set `TWENTY_DEV_PG_PORT` and `PG_DATABASE_URL` to the same port explicitly.
+</Warning>
 
 If you used the Docker option above, the default credentials are user `postgres` and password `postgres`. For native PostgreSQL installations, use the credentials and roles configured on your machine.
 

@@ -1,0 +1,24 @@
+# Example Caddyfile — automatic HTTPS, reverse proxy to API, static SPA.
+# Adjust the site label and paths to match your server.
+# One `path` matcher: multiple patterns are OR'd together.
+
+twenty.example.com {
+	encode gzip zstd
+	request_body {
+		max_size 50MB
+	}
+
+	@api path /healthz /graphql /metadata /webhooks /mcp /client-config /rest/* /auth/* /oauth/* /.well-known/* /public-assets/* /file/* /s/*
+	handle @api {
+		reverse_proxy 127.0.0.1:3000 {
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle {
+		root * /var/www/twenty-front/build
+		try_files {path} /index.html
+		file_server
+	}
+}

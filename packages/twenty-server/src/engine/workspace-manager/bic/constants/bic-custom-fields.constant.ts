@@ -2,6 +2,11 @@ import { FieldMetadataType, RelationType } from 'twenty-shared/types';
 
 import { type FieldMetadataSeed } from 'src/engine/workspace-manager/dev-seeder/metadata/types/field-metadata-seed.type';
 
+// BIC.al sales workflow alignment:
+// Business: NIPT (unique), name (standard), phone, email, salesStage (pipeline).
+// Interaction: chronological history per business; type drives which fields apply
+// (initial contact → meeting scheduling → presentation → package sale).
+
 export const BIC_BUSINESS_CUSTOM_FIELD_SEEDS: FieldMetadataSeed[] = [
   {
     type: FieldMetadataType.TEXT,
@@ -63,13 +68,13 @@ export const BIC_BUSINESS_CUSTOM_FIELD_SEEDS: FieldMetadataSeed[] = [
 export const BIC_INTERACTION_CUSTOM_FIELD_SEEDS: FieldMetadataSeed[] = [
   {
     type: FieldMetadataType.DATE_TIME,
-    label: 'Date',
+    label: 'Contact / activity date',
     name: 'occurredAt',
     isNullable: false,
   },
   {
     type: FieldMetadataType.SELECT,
-    label: 'Type',
+    label: 'Interaction type',
     name: 'interactionType',
     isNullable: false,
     options: [
@@ -101,13 +106,13 @@ export const BIC_INTERACTION_CUSTOM_FIELD_SEEDS: FieldMetadataSeed[] = [
   },
   {
     type: FieldMetadataType.TEXT,
-    label: 'Agent',
+    label: 'Assigned agent',
     name: 'agent',
     isNullable: false,
   },
   {
     type: FieldMetadataType.SELECT,
-    label: 'Status',
+    label: 'Contact status',
     name: 'interactionStatus',
     isNullable: true,
     options: [
@@ -119,16 +124,29 @@ export const BIC_INTERACTION_CUSTOM_FIELD_SEEDS: FieldMetadataSeed[] = [
         color: 'red',
       },
       {
-        label: 'Interested in meeting',
+        label: 'Interested in a meeting',
         value: 'INTERESTED_IN_MEETING',
         position: 2,
         color: 'green',
       },
+      { label: 'Other', value: 'OTHER', position: 3, color: 'orange' },
     ],
   },
   {
+    type: FieldMetadataType.DATE,
+    label: 'Meeting date',
+    name: 'meetingDate',
+    isNullable: true,
+  },
+  {
+    type: FieldMetadataType.TEXT,
+    label: 'Meeting time',
+    name: 'meetingTime',
+    isNullable: true,
+  },
+  {
     type: FieldMetadataType.SELECT,
-    label: 'Meeting result',
+    label: 'Meeting outcome',
     name: 'meetingResult',
     isNullable: true,
     options: [
@@ -145,7 +163,7 @@ export const BIC_INTERACTION_CUSTOM_FIELD_SEEDS: FieldMetadataSeed[] = [
         color: 'red',
       },
       {
-        label: 'Decision pending',
+        label: 'In decision-making process',
         value: 'DECISION_PENDING',
         position: 2,
         color: 'yellow',
@@ -154,18 +172,24 @@ export const BIC_INTERACTION_CUSTOM_FIELD_SEEDS: FieldMetadataSeed[] = [
   },
   {
     type: FieldMetadataType.SELECT,
-    label: 'Package',
+    label: 'Selected package',
     name: 'soldPackage',
     isNullable: true,
     options: [
-      { label: '€150', value: 'EUR_150', position: 0, color: 'green' },
-      { label: '€300', value: 'EUR_300', position: 1, color: 'green' },
-      { label: '€600', value: 'EUR_600', position: 2, color: 'green' },
+      { label: '150 EUR', value: 'EUR_150', position: 0, color: 'green' },
+      { label: '300 EUR', value: 'EUR_300', position: 1, color: 'green' },
+      { label: '600 EUR', value: 'EUR_600', position: 2, color: 'green' },
     ],
   },
   {
+    type: FieldMetadataType.DATE,
+    label: 'Sale date',
+    name: 'saleDate',
+    isNullable: true,
+  },
+  {
     type: FieldMetadataType.TEXT,
-    label: 'Comments',
+    label: 'Notes (call, meeting, sale)',
     name: 'comments',
     isNullable: true,
   },

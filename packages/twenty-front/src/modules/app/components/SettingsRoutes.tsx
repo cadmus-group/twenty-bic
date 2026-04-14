@@ -7,9 +7,12 @@ import { SettingPublicDomain } from '@/settings/domains/components/SettingPublic
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import {
-  FeatureFlagKey,
-  PermissionFlagType,
+    FeatureFlagKey,
+    PermissionFlagType,
 } from '~/generated-metadata/graphql';
+import { SettingsCrmAdminDashboard } from '~/pages/settings/crm/SettingsCrmAdminDashboard';
+import { SettingsCrmNiptHistory } from '~/pages/settings/crm/SettingsCrmNiptHistory';
+import { SettingsCrmUserHistory } from '~/pages/settings/crm/SettingsCrmUserHistory';
 
 const SettingsGraphQLPlayground = lazy(() =>
   import(
@@ -574,6 +577,14 @@ export const SettingsRoutes = ({ isAdminPageEnabled }: SettingsRoutesProps) => (
           path={SettingsPath.PublicDomain}
           element={<SettingPublicDomain />}
         />
+        <Route
+          path={SettingsPath.CrmUserHistory}
+          element={<SettingsCrmUserHistory />}
+        />
+        <Route
+          path={SettingsPath.CrmNiptHistory}
+          element={<SettingsCrmNiptHistory />}
+        />
       </Route>
       <Route
         element={
@@ -760,6 +771,10 @@ export const SettingsRoutes = ({ isAdminPageEnabled }: SettingsRoutesProps) => (
           <Route
             path={SettingsPath.AdminPanelAiProviderDetail}
             element={<SettingsAdminAiProviderDetail />}
+          />
+          <Route
+            path={SettingsPath.CrmAdminDashboard}
+            element={<SettingsCrmAdminDashboard />}
           />
         </>
       )}

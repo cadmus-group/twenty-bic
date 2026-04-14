@@ -14,6 +14,9 @@
 #   bash packages/twenty-utils/setup-dev-env.sh --down    # stop services
 #   bash packages/twenty-utils/setup-dev-env.sh --reset   # wipe data + restart
 #   bash packages/twenty-utils/setup-dev-env.sh --docker  # force Docker mode
+#
+# TWENTY_DEV_PG_PORT: host port for Docker Postgres (default 5433 in compose; 5432 if you use local PG).
+# Used for compose, health checks, psql, and syncing localhost PG_DATABASE_URL after reset:env.
 # =============================================================================
 set -euo pipefail
 
@@ -39,10 +42,11 @@ can_use_docker() {
 }
 
 pg_is_up() {
+  local port="${TWENTY_DEV_PG_PORT:-5433}"
   if command -v pg_isready &>/dev/null; then
-    pg_isready -h localhost -p 5432 -U postgres -q 2>/dev/null
+    pg_isready -h localhost -p "$port" -U postgres -q 2>/dev/null
   elif command -v psql &>/dev/null; then
-    PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -c "SELECT 1" &>/dev/null
+    PGPASSWORD=postgres psql -h localhost -p "$port" -U postgres -c "SELECT 1" &>/dev/null
   elif can_use_docker && docker compose -f "$COMPOSE_FILE" ps --quiet db 2>/dev/null | grep -q .; then
     docker compose -f "$COMPOSE_FILE" exec -T db pg_isready -U postgres -q 2>/dev/null
   else
@@ -92,6 +96,24 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
+
+resolve_twenty_dev_pg_port() {
+  if [ "$USE_DOCKER" = true ]; then
+    export TWENTY_DEV_PG_PORT="${TWENTY_DEV_PG_PORT:-5433}"
+    return
+  fi
+  if has_local_pg; then
+    export TWENTY_DEV_PG_PORT="${TWENTY_DEV_PG_PORT:-5432}"
+    return
+  fi
+  if can_use_docker; then
+    export TWENTY_DEV_PG_PORT="${TWENTY_DEV_PG_PORT:-5433}"
+    return
+  fi
+  export TWENTY_DEV_PG_PORT="${TWENTY_DEV_PG_PORT:-5432}"
+}
+
+resolve_twenty_dev_pg_port
 
 # --------------- stop ---------------
 stop_docker() {
@@ -200,7 +222,7 @@ else
   start_redis
 fi
 
-ok "PostgreSQL on localhost:5432"
+ok "PostgreSQL on localhost:${TWENTY_DEV_PG_PORT}"
 ok "Redis on localhost:6379"
 
 # =============================================================================
@@ -208,8 +230,9 @@ ok "Redis on localhost:6379"
 # =============================================================================
 info "Creating databases..."
 run_psql() {
+  local port="${TWENTY_DEV_PG_PORT:-5433}"
   if command -v psql &>/dev/null; then
-    PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d postgres -c "$1" 2>/dev/null || true
+    PGPASSWORD=postgres psql -h localhost -p "$port" -U postgres -d postgres -c "$1" 2>/dev/null || true
   elif can_use_docker && docker compose -f "$COMPOSE_FILE" ps --quiet db 2>/dev/null | grep -q .; then
     docker compose -f "$COMPOSE_FILE" exec -T db psql -U postgres -d postgres -c "$1" 2>/dev/null || true
   else
@@ -240,6 +263,29 @@ else
     fi
   done
 fi
+
+# Align localhost PG URL port with TWENTY_DEV_PG_PORT (avoids wrong Postgres on 5432)
+sync_server_pg_url_port() {
+  local env_file="$REPO_ROOT/packages/twenty-server/.env"
+  local port="${TWENTY_DEV_PG_PORT:-5433}"
+  [ -f "$env_file" ] || return 0
+  local line updated=false
+  local tmp
+  tmp="$(mktemp)"
+  while IFS= read -r line || [ -n "$line" ]; do
+    if [[ "$line" =~ ^PG_DATABASE_URL=(postgres://[^@]+@)(localhost|127\.0\.0\.1):[0-9]+(/.*)$ ]]; then
+      printf '%s\n' "PG_DATABASE_URL=${BASH_REMATCH[1]}${BASH_REMATCH[2]}:${port}${BASH_REMATCH[3]}"
+      updated=true
+    else
+      printf '%s\n' "$line"
+    fi
+  done < "$env_file" > "$tmp"
+  mv "$tmp" "$env_file"
+  if [ "$updated" = true ]; then
+    ok "twenty-server/.env PG_DATABASE_URL -> localhost:${port}"
+  fi
+}
+sync_server_pg_url_port
 
 # =============================================================================
 echo ""

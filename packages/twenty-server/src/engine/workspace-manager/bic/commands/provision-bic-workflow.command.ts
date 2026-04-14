@@ -13,7 +13,7 @@ type ProvisionBicWorkflowOptions = {
 @Command({
   name: 'workspace:provision:bic',
   description:
-    'Provision BIC Business/Interaction objects and fields into a workspace.',
+    'Provision BIC.al Business (NIPT) + Interaction (communication history) objects. Safe to re-run: adds any new fields.',
 })
 export class BicProvisionBicWorkflowCommand extends CommandRunner {
   private readonly logger = new Logger(BicProvisionBicWorkflowCommand.name);

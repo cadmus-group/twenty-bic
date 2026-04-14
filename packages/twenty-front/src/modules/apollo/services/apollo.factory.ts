@@ -7,9 +7,9 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { ErrorLink } from '@apollo/client/link/error';
 import { RetryLink } from '@apollo/client/link/retry';
-import { from, switchMap } from 'rxjs';
 import { RestLink } from 'apollo-link-rest';
 import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
+import { from, switchMap } from 'rxjs';
 
 import { renewToken } from '@/auth/services/AuthService';
 import { type CurrentWorkspaceMember } from '@/auth/states/currentWorkspaceMemberState';
@@ -50,7 +50,11 @@ const TOKEN_RENEWAL_RETRY_DELAY_MS = 1000;
 export interface Options {
   uri: string;
   cache: ApolloClient.Options['cache'];
-  defaultOptions?: ApolloClient.Options['defaultOptions'];
+  defaultOptions?: ApolloClient.Options['defaultOptions'] & {
+    mutation?: {
+      errorPolicy?: 'none' | 'ignore' | 'all';
+    };
+  };
   headers?: Record<string, string>;
   devtools?: { enabled?: boolean };
   onError?: (err: readonly GraphQLFormattedError[] | undefined) => void;

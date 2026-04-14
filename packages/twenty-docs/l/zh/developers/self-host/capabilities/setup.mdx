@@ -255,9 +255,8 @@ yarn command:prod cron:workflow:automated-cron-trigger
 2. 找到 **电子邮件** 部分
 3. 配置你的 SMTP 设置：
 
-<ArticleTabs label1="Gmail" label2="Office365" label3="Smtp4dev">
-
-  <ArticleTab>
+<Tabs>
+<Tab title="Gmail">
 
   你需要提供一个 [应用密码](https://support.google.com/accounts/answer/185833)。
   * EMAIL_DRIVER=smtp
@@ -266,9 +265,9 @@ yarn command:prod cron:workflow:automated-cron-trigger
   * EMAIL_SMTP_USER=gmail_email_address
   * EMAIL_SMTP_PASSWORD='gmail_app_password'
 
-  </ArticleTab>
+  </Tab>
 
-  <ArticleTab>
+<Tab title="Office365">
 
   请记住，如果您启用了双重身份验证，您需要提供一个 [应用密码](https://support.microsoft.com/en-us/account-billing/manage-app-passwords-for-two-step-verification-d6dc8c6d-4bf7-4851-ad95-6d07799387e9)。
   * EMAIL_DRIVER=smtp
@@ -277,9 +276,9 @@ yarn command:prod cron:workflow:automated-cron-trigger
   * EMAIL_SMTP_USER=office365_email_address
   * EMAIL_SMTP_PASSWORD='office365_password'
 
-  </ArticleTab>
+  </Tab>
 
-  <ArticleTab>
+<Tab title="Smtp4dev">
 
   **smtp4dev** 是一个用于开发和测试的假 SMTP 电子邮件服务器。
   * 运行 smtp4dev 镜像： `docker run --rm -it -p 8090:80 -p 2525:25 rnwood/smtp4dev`
@@ -289,9 +288,8 @@ yarn command:prod cron:workflow:automated-cron-trigger
     * EMAIL_SMTP_HOST=localhost
     * EMAIL_SMTP_PORT=2525
 
-  </ArticleTab>
-
-</ArticleTabs>
+  </Tab>
+</Tabs>
 
 <Warning>
 **仅限环境模式：** 如果你设置 `IS_CONFIG_VARIABLES_IN_DB_ENABLED=false`，请将这些变量添加到 `.env` 文件中。

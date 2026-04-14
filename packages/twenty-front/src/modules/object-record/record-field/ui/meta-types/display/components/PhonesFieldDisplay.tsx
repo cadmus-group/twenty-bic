@@ -15,21 +15,22 @@ export const PhonesFieldDisplay = () => {
 
   const onClickAction = fieldDefinition.metadata.settings?.clickAction;
 
-  const handleClick = async (
-    phoneNumber: string,
-    event: React.MouseEvent<HTMLElement>,
-  ) => {
-    if (onClickAction === FieldMetadataSettingsOnClickAction.COPY) {
-      event.preventDefault();
-      copyToClipboard(phoneNumber, t`Phone number copied to clipboard`);
-    }
-  };
+  const handlePhoneNumberClick =
+    onClickAction === FieldMetadataSettingsOnClickAction.COPY
+      ? async (
+          phoneNumber: string,
+          event: React.MouseEvent<HTMLElement>,
+        ) => {
+          event.preventDefault();
+          copyToClipboard(phoneNumber, t`Phone number copied to clipboard`);
+        }
+      : undefined;
 
   return (
     <PhonesDisplay
       value={fieldValue}
       isFocused={isFocused}
-      onPhoneNumberClick={handleClick}
+      onPhoneNumberClick={handlePhoneNumberClick}
     />
   );
 };

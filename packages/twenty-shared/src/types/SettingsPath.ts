@@ -73,4 +73,8 @@ export enum SettingsPath {
   RoleDetail = 'roles/:roleId',
   RoleObjectLevel = 'roles/:roleId/object/:objectMetadataId',
   RoleAddObjectLevel = 'roles/:roleId/add-object-permission',
+
+  CrmUserHistory = 'crm/user-history',
+  CrmNiptHistory = 'crm/nipt-history',
+  CrmAdminDashboard = 'crm/admin-dashboard',
 }

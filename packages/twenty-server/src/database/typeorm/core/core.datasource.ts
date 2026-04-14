@@ -37,6 +37,11 @@ const getLoggingConfig = (): LogLevel[] => {
 
 const isJest = process.argv.some((arg) => arg.includes('jest'));
 
+// CLI runs this file via ts-node from src/, but compiled Nest uses dist/. Migration
+// glob must read src during migration:* or stale dist/*.js wins (wrong SQL).
+const useSourceMigrationFiles =
+  isJest || process.argv.some((arg) => arg.startsWith('migration:'));
+
 export const typeORMCoreModuleOptions: TypeOrmModuleOptions = {
   url: process.env.PG_DATABASE_URL,
   type: 'postgres',
@@ -59,11 +64,11 @@ export const typeORMCoreModuleOptions: TypeOrmModuleOptions = {
   migrations:
     process.env.IS_BILLING_ENABLED === 'true'
       ? [
-          `${isJest ? 'src/' : 'dist/'}database/typeorm/core/migrations/common/*{.ts,.js}`,
-          `${isJest ? 'src/' : 'dist/'}database/typeorm/core/migrations/billing/*{.ts,.js}`,
+          `${useSourceMigrationFiles ? 'src/' : 'dist/'}database/typeorm/core/migrations/common/*{.ts,.js}`,
+          `${useSourceMigrationFiles ? 'src/' : 'dist/'}database/typeorm/core/migrations/billing/*{.ts,.js}`,
         ]
       : [
-          `${isJest ? 'src/' : 'dist/'}database/typeorm/core/migrations/common/*{.ts,.js}`,
+          `${useSourceMigrationFiles ? 'src/' : 'dist/'}database/typeorm/core/migrations/common/*{.ts,.js}`,
         ],
   ssl:
     process.env.PG_SSL_ALLOW_SELF_SIGNED === 'true'

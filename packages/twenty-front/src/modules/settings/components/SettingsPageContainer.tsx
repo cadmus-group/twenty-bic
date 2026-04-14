@@ -39,18 +39,21 @@ export const SettingsPageContainer = ({
   const isMobile = useIsMobile();
   const location = useLocation();
   const settingsPath = useMemo(() => {
-    const sortedPaths = Object.values(SettingsPath).sort(
-      (a, b) => b.length - a.length,
+    const values = Object.values(SettingsPath) as SettingsPath[];
+    const exactMatch = values.find(
+      (path) => getSettingsPath(path) === location.pathname,
     );
-
+    if (isDefined(exactMatch)) {
+      return exactMatch;
+    }
+    const sortedPaths = values.sort((a, b) => b.length - a.length);
     return sortedPaths.find((path) => {
-      const settingsPath = getSettingsPath(path);
-      const match = matchPath(settingsPath, location.pathname);
-      return isDefined(match);
+      const pattern = getSettingsPath(path);
+      return isDefined(matchPath(pattern, location.pathname));
     });
   }, [location.pathname]);
 
-  const componentInstanceId = `scroll-wrapper-settings-page-container-${settingsPath}`;
+  const componentInstanceId = `scroll-wrapper-settings-page-container-${settingsPath ?? 'unknown'}`;
 
   useScrollRestoration(componentInstanceId);
 

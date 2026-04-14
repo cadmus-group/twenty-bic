@@ -255,9 +255,8 @@ yarn command:prod cron:workflow:automated-cron-trigger
 2. Encontre a seção **Email**
 3. Configure suas configurações SMTP:
 
-<ArticleTabs label1="Gmail" label2="Office365" label3="Smtp4dev">
-
-  <ArticleTab>
+<Tabs>
+<Tab title="Gmail">
 
   Você precisará provisionar uma [Senha de App](https://support.google.com/accounts/answer/185833).
   * EMAIL_DRIVER=smtp
@@ -266,9 +265,9 @@ yarn command:prod cron:workflow:automated-cron-trigger
   * EMAIL_SMTP_USER=gmail_email_address
   * EMAIL_SMTP_PASSWORD='gmail_app_password'
 
-  </ArticleTab>
+  </Tab>
 
-  <ArticleTab>
+<Tab title="Office365">
 
   Lembre-se de que, se você tiver 2FA ativado, precisará providenciar uma [Senha de App](https://support.microsoft.com/en-us/account-billing/manage-app-passwords-for-two-step-verification-d6dc8c6d-4bf7-4851-ad95-6d07799387e9).
   * EMAIL_DRIVER=smtp
@@ -277,9 +276,9 @@ yarn command:prod cron:workflow:automated-cron-trigger
   * EMAIL_SMTP_USER=office365_email_address
   * EMAIL_SMTP_PASSWORD='office365_password'
 
-  </ArticleTab>
+  </Tab>
 
-  <ArticleTab>
+<Tab title="Smtp4dev">
 
   **smtp4dev** é um servidor SMTP falso para desenvolvimento e teste.
   * Execute a imagem smtp4dev: `docker run --rm -it -p 8090:80 -p 2525:25 rnwood/smtp4dev`
@@ -289,9 +288,8 @@ yarn command:prod cron:workflow:automated-cron-trigger
     * EMAIL_SMTP_HOST=localhost
     * EMAIL_SMTP_PORT=2525
 
-  </ArticleTab>
-
-</ArticleTabs>
+  </Tab>
+</Tabs>
 
 <Warning>
 **Modo somente ambiente:** Se você definir `IS_CONFIG_VARIABLES_IN_DB_ENABLED=false`, adicione estas variáveis ao seu arquivo `.env`.
