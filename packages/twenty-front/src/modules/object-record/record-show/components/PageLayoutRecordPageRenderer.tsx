@@ -1,6 +1,7 @@
 import { RecordPageSidePanelCommandMenu } from '@/command-menu-item/components/RecordPageSidePanelCommandMenu';
 import { RecordShowSidePanelOpenRecordButton } from '@/command-menu-item/components/RecordShowSidePanelOpenRecordButton';
 import { InformationBannerDeletedRecord } from '@/information-banner/components/deleted-record/InformationBannerDeletedRecord';
+import { BusinessNiptOnCreateSection } from '@/object-record/record-show/components/BusinessNiptOnCreateSection';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { RecordShowContainerContextStoreTargetedRecordsEffect } from '@/object-record/record-show/components/RecordShowContainerContextStoreTargetedRecordsEffect';
 import { RecordShowEffect } from '@/object-record/record-show/components/RecordShowEffect';
@@ -38,9 +39,11 @@ const StyledContentContainer = styled.div<{ isInSidePanel: boolean }>`
 export const PageLayoutRecordPageRenderer = ({
   targetRecordIdentifier,
   isInSidePanel,
+  isNewlyCreatedRecord = false,
 }: {
   targetRecordIdentifier: TargetRecordIdentifier;
   isInSidePanel: boolean;
+  isNewlyCreatedRecord?: boolean;
 }) => {
   const recordDeletedAt = useAtomFamilySelectorValue(
     recordStoreFamilySelector,
@@ -90,8 +93,12 @@ export const PageLayoutRecordPageRenderer = ({
                   ? PageLayoutType.DASHBOARD
                   : PageLayoutType.RECORD_PAGE,
               isInSidePanel,
+              isNewlyCreatedRecord,
             }}
           >
+            <BusinessNiptOnCreateSection
+              key={targetRecordIdentifier.id}
+            />
             {isDefined(pageLayoutId) && (
               <PageLayoutRenderer pageLayoutId={pageLayoutId} />
             )}

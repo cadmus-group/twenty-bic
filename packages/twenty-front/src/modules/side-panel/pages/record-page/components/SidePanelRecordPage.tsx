@@ -1,6 +1,7 @@
 import { CommandMenuComponentInstanceContext } from '@/command-menu/states/contexts/CommandMenuComponentInstanceContext';
 import { TimelineActivityContext } from '@/activities/timeline-activities/contexts/TimelineActivityContext';
 import { viewableRecordIdComponentState } from '@/side-panel/pages/record-page/states/viewableRecordIdComponentState';
+import { viewableRecordIsNewlyCreatedComponentState } from '@/side-panel/pages/record-page/states/viewableRecordIsNewlyCreatedComponentState';
 import { viewableRecordNameSingularComponentState } from '@/side-panel/pages/record-page/states/viewableRecordNameSingularComponentState';
 import { SidePanelPageComponentInstanceContext } from '@/side-panel/states/contexts/SidePanelPageComponentInstanceContext';
 import { ContextStoreComponentInstanceContext } from '@/context-store/states/contexts/ContextStoreComponentInstanceContext';
@@ -32,6 +33,10 @@ export const SidePanelRecordPage = () => {
 
   const viewableRecordId = useAtomComponentStateValue(
     viewableRecordIdComponentState,
+  );
+
+  const viewableRecordIsNewlyCreated = useAtomComponentStateValue(
+    viewableRecordIsNewlyCreatedComponentState,
   );
 
   if (!viewableRecordNameSingular) {
@@ -87,6 +92,7 @@ export const SidePanelRecordPage = () => {
                   targetObjectNameSingular: objectNameSingular,
                 }}
                 isInSidePanel
+                isNewlyCreatedRecord={viewableRecordIsNewlyCreated === true}
               />
             </TimelineActivityContext.Provider>
           </StyledSidePanelRecord>

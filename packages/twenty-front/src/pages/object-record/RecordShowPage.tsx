@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { RecordShowCommandMenu } from '@/command-menu-item/components/RecordShowCommandMenu';
 import { CommandMenuComponentInstanceContext } from '@/command-menu/states/contexts/CommandMenuComponentInstanceContext';
@@ -17,6 +17,7 @@ import { RecordShowPageHeader } from '~/pages/object-record/RecordShowPageHeader
 import { RecordShowPageTitle } from '~/pages/object-record/RecordShowPageTitle';
 
 export const RecordShowPage = () => {
+  const location = useLocation();
   const parameters = useParams<{
     objectNameSingular: string;
     objectRecordId: string;
@@ -64,6 +65,7 @@ export const RecordShowPage = () => {
                     targetObjectNameSingular: objectNameSingular,
                   }}
                   isInSidePanel={false}
+                  isNewlyCreatedRecord={location.state?.isNewRecord === true}
                 />
                 <RecordShowPageSSESubscribeEffect
                   objectNameSingular={objectNameSingular}

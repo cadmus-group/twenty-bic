@@ -1,5 +1,6 @@
 import { useSidePanelMenu } from '@/side-panel/hooks/useSidePanelMenu';
 import { viewableRecordIdComponentState } from '@/side-panel/pages/record-page/states/viewableRecordIdComponentState';
+import { viewableRecordIsNewlyCreatedComponentState } from '@/side-panel/pages/record-page/states/viewableRecordIsNewlyCreatedComponentState';
 import { viewableRecordNameSingularComponentState } from '@/side-panel/pages/record-page/states/viewableRecordNameSingularComponentState';
 import { sidePanelNavigationMorphItemsByPageState } from '@/side-panel/states/sidePanelNavigationMorphItemsByPageState';
 import { sidePanelNavigationStackState } from '@/side-panel/states/sidePanelNavigationStackState';
@@ -76,6 +77,12 @@ export const useOpenRecordInSidePanel = () => {
           instanceId: pageComponentInstanceId,
         }),
         recordId,
+      );
+      store.set(
+        viewableRecordIsNewlyCreatedComponentState.atomFamily({
+          instanceId: pageComponentInstanceId,
+        }),
+        isNewRecord,
       );
       store.set(viewableRecordIdState.atom, recordId);
 

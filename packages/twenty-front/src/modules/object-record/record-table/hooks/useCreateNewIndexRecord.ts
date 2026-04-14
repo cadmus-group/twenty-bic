@@ -9,6 +9,7 @@ import { recordIndexGroupFieldMetadataItemComponentState } from '@/object-record
 import { recordIndexOpenRecordInState } from '@/object-record/record-index/states/recordIndexOpenRecordInState';
 import { recordIndexRecordIdsByGroupComponentFamilyState } from '@/object-record/record-index/states/recordIndexRecordIdsByGroupComponentFamilyState';
 import { useUpsertRecordsInStore } from '@/object-record/record-store/hooks/useUpsertRecordsInStore';
+import { recordCreationPendingNiptRecordIdState } from '@/object-record/record-show/states/recordCreationPendingNiptRecordIdState';
 import { useBuildRecordInputFromFilters } from '@/object-record/record-table/hooks/useBuildRecordInputFromFilters';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { canOpenObjectInSidePanel } from '@/object-record/utils/canOpenObjectInSidePanel';
@@ -92,6 +93,28 @@ export const useCreateNewIndexRecord = ({
         id: recordId,
         ...mergedRecordInput,
       });
+
+      const hasNiptField = objectMetadataItem.fields.some(
+        (fieldMetadataItem) => {
+          const normalizedLabel = fieldMetadataItem.label
+            ?.trim()
+            .toLowerCase();
+
+          return (
+            fieldMetadataItem.name === 'nipt' ||
+            fieldMetadataItem.name === 'businessNipt' ||
+            normalizedLabel === 'nipt'
+          );
+        },
+      );
+
+      const isBusinessOrCompanyObject =
+        objectMetadataItem.nameSingular === 'business' ||
+        objectMetadataItem.nameSingular === 'company';
+
+      if (hasNiptField || isBusinessOrCompanyObject) {
+        store.set(recordCreationPendingNiptRecordIdState, recordId);
+      }
 
       if (
         recordIndexOpenRecordIn === ViewOpenRecordIn.SIDE_PANEL &&

@@ -11,6 +11,9 @@ export type LayoutRenderingContextType = {
   layoutType: PageLayoutType;
 
   isInSidePanel: boolean;
+
+  // True right after creating a record (full page navigation or side panel create flow).
+  isNewlyCreatedRecord?: boolean;
 };
 
 export const [LayoutRenderingProvider, useLayoutRenderingContext] =
