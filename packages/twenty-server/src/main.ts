@@ -36,6 +36,8 @@ const getNestBootstrapLogLevels = (): LogLevel[] | undefined => {
 const bootstrap = async () => {
   setPgDateTypeParser();
 
+  console.log(`[${new Date().toISOString()}] [bootstrap] BEFORE NestFactory.create()`);
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
     logger: getNestBootstrapLogLevels(),
@@ -51,6 +53,9 @@ const bootstrap = async () => {
         }
       : {}),
   });
+
+  console.log(`[${new Date().toISOString()}] [bootstrap] AFTER NestFactory.create() — AppModule initialized`);
+
   const logger = app.get(LoggerService);
   const twentyConfigService = app.get(TwentyConfigService);
 
@@ -61,6 +66,8 @@ const bootstrap = async () => {
 
   // Use our logger
   app.useLogger(logger);
+
+  console.log(`[${new Date().toISOString()}] [bootstrap] AFTER app.useLogger()`);
 
   app.useGlobalFilters(new UnhandledExceptionFilter());
 
@@ -90,7 +97,13 @@ const bootstrap = async () => {
   // Inject the server url in the frontend page
   generateFrontConfig();
 
+  console.log(`[${new Date().toISOString()}] [bootstrap] AFTER all middleware/filters applied`);
+
+  console.log(`[${new Date().toISOString()}] [bootstrap] BEFORE app.listen() on port ${twentyConfigService.get('NODE_PORT')}`);
+
   await app.listen(twentyConfigService.get('NODE_PORT'));
+
+  console.log(`[${new Date().toISOString()}] [bootstrap] AFTER app.listen() — server is now accepting connections`);
 };
 
 bootstrap();
