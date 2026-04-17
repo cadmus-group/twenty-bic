@@ -1,5 +1,8 @@
 import { type TypeOrmModuleOptions } from '@nestjs/typeorm';
 
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { config } from 'dotenv';
 import { DataSource, type DataSourceOptions, type LogLevel } from 'typeorm';
 config({
@@ -36,11 +39,15 @@ const getLoggingConfig = (): LogLevel[] => {
 };
 
 const isJest = process.argv.some((arg) => arg.includes('jest'));
+const hasSourceMigrations = existsSync(
+  resolve(process.cwd(), 'src/database/typeorm/core/migrations/common'),
+);
 
 // CLI runs this file via ts-node from src/, but compiled Nest uses dist/. Migration
 // glob must read src during migration:* or stale dist/*.js wins (wrong SQL).
 const useSourceMigrationFiles =
-  isJest || process.argv.some((arg) => arg.startsWith('migration:'));
+  hasSourceMigrations &&
+  (isJest || process.argv.some((arg) => arg.startsWith('migration:')));
 
 export const typeORMCoreModuleOptions: TypeOrmModuleOptions = {
   url: process.env.PG_DATABASE_URL,
