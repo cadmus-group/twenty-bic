@@ -46,23 +46,6 @@ RUN find /app/packages/twenty-server/dist -name '*.d.ts' -delete \
 
 RUN yarn workspaces focus --production twenty-emails twenty-shared twenty-sdk twenty-server
 
-FROM common-deps AS twenty-front-build
-
-ARG REACT_APP_SERVER_BASE_URL
-
-COPY ./packages/twenty-front /app/packages/twenty-front
-COPY ./packages/twenty-ui /app/packages/twenty-ui
-COPY ./packages/twenty-shared /app/packages/twenty-shared
-COPY ./packages/twenty-sdk /app/packages/twenty-sdk
-COPY ./packages/twenty-client-sdk /app/packages/twenty-client-sdk
-RUN npx nx run twenty-front:lingui:extract && \
-    npx nx run twenty-front:lingui:compile
-RUN if [ -d /app/packages/twenty-front/build ]; then \
-      echo "Using pre-built frontend from host"; \
-    else \
-      NODE_OPTIONS="--max-old-space-size=8192" npx nx build twenty-front; \
-    fi
-
 FROM node:24-alpine
 
 RUN apk add --no-cache curl jq postgresql-client
@@ -94,10 +77,8 @@ COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-sdk/package.js
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-ui/package.json /app/packages/twenty-ui/
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-front/package.json /app/packages/twenty-front/
 
-COPY --chown=1000 --from=twenty-front-build /app/packages/twenty-front/build /app/packages/twenty-server/dist/front
-
 LABEL org.opencontainers.image.source=https://github.com/twentyhq/twenty
-LABEL org.opencontainers.image.description="Production Twenty image with backend and frontend for Railway."
+LABEL org.opencontainers.image.description="Production Twenty backend image for Railway."
 
 RUN mkdir -p /app/.local-storage /app/packages/twenty-server/.local-storage && \
     chown 1000:1000 /app/.local-storage /app/packages/twenty-server/.local-storage
