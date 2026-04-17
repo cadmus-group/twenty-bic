@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { type LogLevel } from '@nestjs/common';
 import { type NestExpressApplication } from '@nestjs/platform-express';
 
 import fs from 'fs';
@@ -22,12 +23,22 @@ import './instrument';
 import { settings } from './engine/constants/settings';
 import { generateFrontConfig } from './utils/generate-front-config';
 
+const getNestBootstrapLogLevels = (): LogLevel[] | undefined => {
+  if (process.env.NODE_ENV !== NodeEnvironment.PRODUCTION) {
+    return undefined;
+  }
+
+  // Reduce noisy startup logs in production to avoid provider log throttling.
+  return ['error', 'warn'];
+};
+
 // Trigger
 const bootstrap = async () => {
   setPgDateTypeParser();
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
+    logger: getNestBootstrapLogLevels(),
     bufferLogs: process.env.LOGGER_IS_BUFFER_ENABLED === 'true',
     rawBody: true,
     snapshot: process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT,
