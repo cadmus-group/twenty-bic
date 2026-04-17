@@ -194,6 +194,7 @@
     "docs:generate": "tsx packages/twenty-docs/scripts/generate-docs-json.ts",
     "docs:generate-navigation-template": "tsx packages/twenty-docs/scripts/generate-navigation-template.ts",
     "docs:generate-paths": "tsx packages/twenty-docs/scripts/generate-documentation-paths.ts",
+    "run:all": "bash ./run-all.sh",
     "start": "bash packages/twenty-utils/ensure-dev-redis.sh && npx concurrently --kill-others -n api,web,worker -c blue,green,magenta 'npx nx run twenty-server:start' 'npx wait-on -t 240000 tcp:3000 && npx nx run twenty-front:start' 'npx wait-on -t 240000 tcp:3000 && npx nx run twenty-server:worker'",
     "deploy:check": "bash packages/twenty-utils/deploy-preflight.sh",
     "deploy:migrate": "bash packages/twenty-utils/deploy-preflight.sh && npx nx run twenty-server:database:migrate",
@@ -203,8 +204,7 @@
     "deploy:pm2:start": "npx pm2@5 start packages/twenty-utils/ecosystem.config.js --env production",
     "deploy:pm2:reload": "npx pm2@5 reload packages/twenty-utils/ecosystem.config.js --env production",
     "deploy:pm2:stop": "npx pm2@5 stop packages/twenty-utils/ecosystem.config.js",
-    "deploy:pm2:delete": "npx pm2@5 delete packages/twenty-utils/ecosystem.config.js",
-    "deploy:bare-metal:configure": "bash packages/twenty-utils/setup-bare-metal-crm.sh"
+    "deploy:pm2:delete": "npx pm2@5 delete packages/twenty-utils/ecosystem.config.js"
   },
   "workspaces": {
     "packages": [

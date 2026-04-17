@@ -42,7 +42,7 @@ fi
 
 if can_use_docker; then
   echo "=> Starting Redis via Docker (dev compose)…"
-  docker compose -f "$COMPOSE_FILE" up -d redis
+  docker compose -f "$COMPOSE_FILE" up -d --build redis
   if ! wait_redis; then
     echo "error: Redis did not become reachable on localhost:6379." >&2
     exit 1
@@ -53,7 +53,7 @@ fi
 
 echo "error: Redis is not running on localhost:6379 (see REDIS_URL in packages/twenty-server/.env)." >&2
 echo "  With Docker:" >&2
-echo "    docker compose -f packages/twenty-docker/docker-compose.dev.yml up -d redis" >&2
+echo "    docker compose -f packages/twenty-docker/docker-compose.dev.yml up -d --build redis" >&2
 echo "  Or full infra + .env:" >&2
 echo "    bash packages/twenty-utils/setup-dev-env.sh" >&2
 exit 1

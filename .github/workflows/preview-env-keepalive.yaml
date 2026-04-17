@@ -43,9 +43,7 @@ jobs:
           echo "APP_SECRET=$(openssl rand -base64 32)" >> packages/twenty-docker/.env
           echo "PG_DATABASE_PASSWORD=$(openssl rand -hex 16)" >> packages/twenty-docker/.env
           echo "SIGN_IN_PREFILLED=true" >> packages/twenty-docker/.env
-          echo "Docker compose build..."
-          cd packages/twenty-docker/
-          docker compose build
+          echo "Docker images will build on first compose up (see Start services step)."
         working-directory: ./
 
       - name: Create Tunnel
@@ -67,8 +65,8 @@ jobs:
           echo "SERVER_URL=$TUNNEL_URL" >> .env
 
           # Start the services
-          echo "Docker compose up..."
-          docker compose up -d || {
+          echo "Docker compose up --build..."
+          docker compose up --build -d || {
               echo "Docker compose failed to start"
               docker compose logs
               exit 1

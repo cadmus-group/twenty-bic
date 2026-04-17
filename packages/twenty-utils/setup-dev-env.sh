@@ -184,7 +184,7 @@ start_pg() {
     sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';" 2>/dev/null || true
   elif can_use_docker; then
     info "Starting PostgreSQL via Docker..."
-    docker compose -f "$COMPOSE_FILE" up -d db
+    docker compose -f "$COMPOSE_FILE" up -d --build db
     wait_for_pg
   else
     fail "No PostgreSQL available. Install PostgreSQL 16 or Docker."
@@ -204,7 +204,7 @@ start_redis() {
     wait_for_redis
   elif can_use_docker; then
     info "Starting Redis via Docker..."
-    docker compose -f "$COMPOSE_FILE" up -d redis
+    docker compose -f "$COMPOSE_FILE" up -d --build redis
     wait_for_redis
   else
     fail "No Redis available. Install Redis or Docker."
@@ -214,7 +214,7 @@ start_redis() {
 
 if [ "$USE_DOCKER" = true ]; then
   info "Starting services via Docker Compose..."
-  docker compose -f "$COMPOSE_FILE" up -d
+  docker compose -f "$COMPOSE_FILE" up -d --build
   wait_for_pg
   wait_for_redis
 else
