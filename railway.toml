@@ -1,6 +1,6 @@
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "packages/twenty-docker/twenty/Dockerfile"
+dockerfilePath = "packages/twenty-docker/twenty/Dockerfile.railway"
 
 [deploy]
 # Keep the image entrypoint behavior (DB setup/migrations) and run API.
