@@ -42,6 +42,8 @@ const getServerPort = (configuredPort: number): number => {
   return configuredPort;
 };
 
+const SERVER_HOST = '0.0.0.0';
+
 // Trigger
 const bootstrap = async () => {
   setPgDateTypeParser();
@@ -112,10 +114,10 @@ const bootstrap = async () => {
   const serverPort = getServerPort(twentyConfigService.get('NODE_PORT'));
 
   console.log(
-    `[${new Date().toISOString()}] [bootstrap] BEFORE app.listen() on port ${serverPort}`,
+    `[${new Date().toISOString()}] [bootstrap] BEFORE app.listen() on ${SERVER_HOST}:${serverPort}`,
   );
 
-  await app.listen(serverPort);
+  await app.listen(serverPort, SERVER_HOST);
 
   console.log(`[${new Date().toISOString()}] [bootstrap] AFTER app.listen() — server is now accepting connections`);
 };
