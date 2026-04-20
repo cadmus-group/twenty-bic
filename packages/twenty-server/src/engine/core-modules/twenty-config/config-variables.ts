@@ -45,6 +45,16 @@ import {
   ConfigVariableExceptionCode,
 } from 'src/engine/core-modules/twenty-config/twenty-config.exception';
 
+const getDefaultNodePort = (): number => {
+  const parsedPort = Number(process.env.PORT);
+
+  if (Number.isNaN(parsedPort) || parsedPort <= 0) {
+    return 3000;
+  }
+
+  return parsedPort;
+};
+
 export class ConfigVariables {
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
@@ -1008,7 +1018,7 @@ export class ConfigVariables {
   })
   @CastToPositiveNumber()
   @IsOptional()
-  NODE_PORT = 3000;
+  NODE_PORT = getDefaultNodePort();
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
