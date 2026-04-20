@@ -32,6 +32,16 @@ const getNestBootstrapLogLevels = (): LogLevel[] | undefined => {
   return ['error', 'warn'];
 };
 
+const getServerPort = (configuredPort: number): number => {
+  const railwayPort = Number(process.env.PORT);
+
+  if (!Number.isNaN(railwayPort) && railwayPort > 0) {
+    return railwayPort;
+  }
+
+  return configuredPort;
+};
+
 // Trigger
 const bootstrap = async () => {
   setPgDateTypeParser();
@@ -99,9 +109,13 @@ const bootstrap = async () => {
 
   console.log(`[${new Date().toISOString()}] [bootstrap] AFTER all middleware/filters applied`);
 
-  console.log(`[${new Date().toISOString()}] [bootstrap] BEFORE app.listen() on port ${twentyConfigService.get('NODE_PORT')}`);
+  const serverPort = getServerPort(twentyConfigService.get('NODE_PORT'));
 
-  await app.listen(twentyConfigService.get('NODE_PORT'));
+  console.log(
+    `[${new Date().toISOString()}] [bootstrap] BEFORE app.listen() on port ${serverPort}`,
+  );
+
+  await app.listen(serverPort);
 
   console.log(`[${new Date().toISOString()}] [bootstrap] AFTER app.listen() — server is now accepting connections`);
 };

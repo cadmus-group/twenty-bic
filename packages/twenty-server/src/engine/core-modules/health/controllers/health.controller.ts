@@ -4,7 +4,7 @@ import { HealthCheck, HealthCheckService } from '@nestjs/terminus';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { PublicEndpointGuard } from 'src/engine/guards/public-endpoint.guard';
 
-@Controller('healthz')
+@Controller('core-healthz')
 export class HealthController {
   constructor(private readonly health: HealthCheckService) {}
 
