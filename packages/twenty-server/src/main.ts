@@ -51,7 +51,20 @@ const bootstrap = async () => {
   console.log(`[${new Date().toISOString()}] [bootstrap] BEFORE NestFactory.create()`);
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
+    cors: {
+      origin: true,
+      credentials: true,
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+      allowedHeaders: [
+        'Origin',
+        'X-Requested-With',
+        'Content-Type',
+        'Accept',
+        'Authorization',
+        'apollo-require-preflight',
+        'x-apollo-operation-name',
+      ],
+    },
     logger: getNestBootstrapLogLevels(),
     bufferLogs: process.env.LOGGER_IS_BUFFER_ENABLED === 'true',
     rawBody: true,
