@@ -1,9 +1,8 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "corepack enable && yarn install --immutable && npx nx run twenty-front:build"
+builder = "DOCKERFILE"
+dockerfilePath = "packages/twenty-docker/twenty-front/Dockerfile.railway"
 
 [deploy]
-startCommand = "npx serve -s packages/twenty-front/build -l $PORT"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
