@@ -24,7 +24,7 @@ COPY ./packages/twenty-emails/package.json /app/packages/twenty-emails/
 COPY ./packages/twenty-server/package.json /app/packages/twenty-server/
 COPY ./packages/twenty-server/patches /app/packages/twenty-server/patches
 
-RUN yarn install --immutable && yarn cache clean && npx nx reset
+RUN yarn && yarn cache clean && npx nx reset
 
 FROM deps AS build
 
