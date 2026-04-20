@@ -3,6 +3,7 @@
 # ===========================================================================
 # Railway production image for twenty-front (static SPA)
 # Builds with Yarn workspaces + Nx, serves `build/` on $PORT.
+# REACT_APP_SERVER_BASE_URL is injected at container start, not build time.
 # ===========================================================================
 
 FROM node:24-alpine AS deps
@@ -34,9 +35,6 @@ COPY ./packages/twenty-sdk /app/packages/twenty-sdk
 COPY ./packages/twenty-client-sdk /app/packages/twenty-client-sdk
 COPY ./packages/twenty-front /app/packages/twenty-front
 
-ARG REACT_APP_SERVER_BASE_URL
-ENV REACT_APP_SERVER_BASE_URL=$REACT_APP_SERVER_BASE_URL
-
 RUN npx nx run twenty-front:build
 
 FROM node:24-alpine
@@ -46,9 +44,13 @@ WORKDIR /app
 RUN npm install --global serve@14
 
 COPY --from=build /app/packages/twenty-front/build /app/build
+COPY --from=build /app/packages/twenty-front/scripts/inject-runtime-env.sh /app/inject-runtime-env.sh
+RUN chmod +x /app/inject-runtime-env.sh
 
 ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "serve -s /app/build -l ${PORT:-3000}"]
+# Inject REACT_APP_SERVER_BASE_URL at container start so the value comes from
+# Railway service env, not a build-time ARG.
+CMD ["sh", "-c", "cd /app && ./inject-runtime-env.sh && serve -s /app/build -l ${PORT:-3000}"]
