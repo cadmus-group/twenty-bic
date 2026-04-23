@@ -1194,6 +1194,14 @@ msgstr "Address 2"
 msgid "Admin"
 msgstr "Admin"
 
+#. js-lingui-id: 84oArf
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+#: src/modules/settings/hooks/useSettingsNavigationItems.tsx
+msgid "Admin dashboard"
+msgstr "Admin dashboard"
+
 #. js-lingui-id: g1in8j
 #: src/pages/settings/admin-panel/SettingsAdminQueueDetail.tsx
 #: src/pages/settings/admin-panel/SettingsAdminNewAiProvider.tsx
@@ -1684,6 +1692,11 @@ msgstr "and"
 #: src/modules/workflow/workflow-steps/filters/components/WorkflowStepFilterLogicalOperatorCell.tsx
 msgid "And"
 msgstr "And"
+
+#. js-lingui-id: GqCA/t
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+msgid "Answered"
+msgstr "Answered"
 
 #. js-lingui-id: KYvJeB
 #: src/modules/object-record/advanced-filter/components/AdvancedFilterSubFieldSelectMenu.tsx
@@ -2286,6 +2299,11 @@ msgstr "Avatar file field not found for person object"
 msgid "Average"
 msgstr "Average"
 
+#. js-lingui-id: eQHj1l
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+msgid "Average duration"
+msgstr "Average duration"
+
 #. js-lingui-id: li9In6
 #: src/modules/side-panel/pages/page-layout/constants/settings/ChartConfigurationSettingLabels.ts
 msgid "Axis name"
@@ -2492,6 +2510,11 @@ msgstr "bullet"
 msgid "Bullet List"
 msgstr "Bullet List"
 
+#. js-lingui-id: kVHATU
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+msgid "Busy"
+msgstr "Busy"
+
 #. js-lingui-id: 8ds4Hj
 #: src/pages/settings/applications/components/SettingsAvailableApplicationCard.tsx
 msgid "by {author}"
@@ -2613,6 +2636,11 @@ msgstr "Calendars"
 msgid "Calling Code"
 msgstr "Calling Code"
 
+#. js-lingui-id: 6rDDu7
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+msgid "Calls and CRM events logged for your workspace member."
+msgstr "Calls and CRM events logged for your workspace member."
+
 #. js-lingui-id: msssZq
 #: src/modules/settings/data-model/objects/forms/components/SettingsDataModelObjectAboutForm.tsx
 msgid "Can't change API names for standard objects"
@@ -2690,6 +2718,7 @@ msgstr "Cancel your subscription"
 
 #. js-lingui-id: GGWsTU
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
 msgid "Canceled"
 msgstr "Canceled"
 
@@ -3590,10 +3619,30 @@ msgstr "Cost per million tokens (USD)"
 msgid "Cost per million tokens for cached input (USD)"
 msgstr "Cost per million tokens for cached input (USD)"
 
+#. js-lingui-id: govZSm
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "Could not create or find the NIPT field on this object."
+msgstr "Could not create or find the NIPT field on this object."
+
 #. js-lingui-id: VVRHmR
 #: src/modules/settings/security/components/approvedAccessDomains/SettingsSecurityApprovedAccessDomainRowDropdownMenu.tsx
 msgid "Could not delete approved access domain"
 msgstr "Could not delete approved access domain"
+
+#. js-lingui-id: riUIFW
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+msgid "Could not load analytics. You may need workspace settings access."
+msgstr "Could not load analytics. You may need workspace settings access."
+
+#. js-lingui-id: LE1cSg
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+msgid "Could not load history. Refresh the page or try again later."
+msgstr "Could not load history. Refresh the page or try again later."
+
+#. js-lingui-id: W7zDq+
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+msgid "Could not load results. Check the ID and try again."
+msgstr "Could not load results. Check the ID and try again."
 
 #. js-lingui-id: KqYYBp
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
@@ -3609,6 +3658,11 @@ msgstr "Could not open Stripe. Please contact support."
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
 msgid "Could not refresh validity token. Please contact support."
 msgstr "Could not refresh validity token. Please contact support."
+
+#. js-lingui-id: hjtkIV
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "Could not save NIPT. Please enter a valid value and try again."
+msgstr "Could not save NIPT. Please enter a valid value and try again."
 
 #. js-lingui-id: s8lFtq
 #: src/hooks/useCopyToClipboard.tsx
@@ -3930,6 +3984,11 @@ msgstr "Credits Used"
 #: src/modules/settings/data-model/fields/forms/select/components/SettingsDataModelFieldSelectFormOptionRow.tsx
 msgid "Crimson"
 msgstr "Crimson"
+
+#. js-lingui-id: MSlbwg
+#: src/modules/settings/hooks/useSettingsNavigationItems.tsx
+msgid "CRM"
+msgstr "CRM"
 
 #. js-lingui-id: 6Oaeoc
 #: src/modules/settings/logic-functions/components/tabs/SettingsLogicFunctionTriggersTab.tsx
@@ -5018,6 +5077,12 @@ msgstr "Duplicate Workflow"
 msgid "Duplicates"
 msgstr "Duplicates"
 
+#. js-lingui-id: lkz6PL
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+msgid "Duration"
+msgstr "Duration"
+
 #. js-lingui-id: KIjvtr
 #: src/pages/settings/profile/appearance/components/LocalePicker.tsx
 msgid "Dutch"
@@ -5520,6 +5585,11 @@ msgstr "Enjoy a {withCreditCardTrialPeriodDuration}-days free trial"
 msgid "Enjoy a 30-day free trial"
 msgstr "Enjoy a 30-day free trial"
 
+#. js-lingui-id: iO4zQY
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+msgid "Enter a business tax ID above, then press Search."
+msgstr "Enter a business tax ID above, then press Search."
+
 #. js-lingui-id: T/N+2Z
 #: src/modules/workflow/workflow-trigger/components/WorkflowEditTriggerWebhookForm.tsx
 #: src/modules/object-record/record-field/ui/form-types/components/FormRawJsonFieldInput.tsx
@@ -5566,6 +5636,11 @@ msgstr "Enter array of items or variable expression"
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionEmailBase.tsx
 msgid "Enter BCC emails, comma-separated"
 msgstr "Enter BCC emails, comma-separated"
+
+#. js-lingui-id: LtJWWW
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "Enter business NIPT"
+msgstr "Enter business NIPT"
 
 #. js-lingui-id: mPsuKh
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionEmailBase.tsx
@@ -5616,6 +5691,11 @@ msgstr "Enter link"
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionEmailBase.tsx
 msgid "Enter Message-ID to reply to"
 msgstr "Enter Message-ID to reply to"
+
+#. js-lingui-id: PfpSmv
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+msgid "Enter NIPT"
+msgstr "Enter NIPT"
 
 #. js-lingui-id: O0qPMN
 #: src/modules/workflow/workflow-trigger/components/WorkflowEditTriggerCronForm.tsx
@@ -5988,6 +6068,8 @@ msgstr "Evaluations"
 #. js-lingui-id: 0pC/y6
 #: src/pages/settings/security/event-logs/components/EventLogResultsTable.tsx
 #: src/pages/settings/security/event-logs/components/EventLogResultsTable.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
 #: src/modules/activities/calendar/components/CalendarEventDetails.tsx
 msgid "Event"
 msgstr "Event"
@@ -6321,6 +6403,7 @@ msgstr "Extra Credits Used"
 
 #. js-lingui-id: 7Bj3x9
 #: src/pages/settings/emailing-domains/utils/getEmailingDomainStatusText.ts
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
 #: src/modules/settings/admin-panel/health-status/components/SettingsAdminQueueJobsTable.tsx
 #: src/modules/ai/components/CodeExecutionDisplay.tsx
 msgid "Failed"
@@ -8712,6 +8795,11 @@ msgstr "Logout"
 msgid "Logs"
 msgstr "Logs"
 
+#. js-lingui-id: KjcTBN
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+msgid "Look up CRM call logs for a business by tax ID (NIPT)."
+msgstr "Look up CRM call logs for a business by tax ID (NIPT)."
+
 #. js-lingui-id: PTozs8
 #: src/modules/settings/admin-panel/components/SettingsAdminGeneral.tsx
 msgid "Look up users and manage their workspace feature flags or impersonate them."
@@ -9585,6 +9673,38 @@ msgstr "Next Step"
 msgid "Ninth"
 msgstr "Ninth"
 
+#. js-lingui-id: r+t2Fv
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "NIPT"
+msgstr "NIPT"
+
+#. js-lingui-id: aLJmQU
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+#: src/modules/settings/hooks/useSettingsNavigationItems.tsx
+msgid "NIPT history"
+msgstr "NIPT history"
+
+#. js-lingui-id: 323xyS
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "NIPT is required."
+msgstr "NIPT is required."
+
+#. js-lingui-id: lMag4l
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "NIPT must be unique. This value already exists."
+msgstr "NIPT must be unique. This value already exists."
+
+#. js-lingui-id: FHU8Yw
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "NIPT saved successfully."
+msgstr "NIPT saved successfully."
+
 #. js-lingui-id: 1UzENP
 #: src/modules/settings/roles/role-permissions/object-level-permissions/components/SettingsRolePermissionsObjectLevelUpdateFieldsValueForObject.tsx
 #: src/modules/settings/roles/role-permissions/object-level-permissions/components/SettingsRolePermissionsObjectLevelSeeFieldsValueForObject.tsx
@@ -9637,6 +9757,11 @@ msgstr "No agents available"
 #: src/modules/settings/roles/role-assignment/components/SettingsRoleAssignmentEntityPickerDropdown.tsx
 msgid "No agents match your search"
 msgstr "No agents match your search"
+
+#. js-lingui-id: 5P+oLK
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+msgid "No answer"
+msgstr "No answer"
 
 #. js-lingui-id: 9mx36q
 #: src/modules/settings/roles/role-assignment/components/SettingsRoleAssignmentTable.tsx
@@ -9715,6 +9840,16 @@ msgstr "No credit consumption recorded for this user."
 #: src/modules/settings/usage/components/SettingsUsageAnalyticsSection.tsx
 msgid "No credit consumption recorded yet."
 msgstr "No credit consumption recorded yet."
+
+#. js-lingui-id: E/Az1d
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+msgid "No CRM events for this NIPT"
+msgstr "No CRM events for this NIPT"
+
+#. js-lingui-id: 3S8zTx
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+msgid "No CRM events yet"
+msgstr "No CRM events yet"
 
 #. js-lingui-id: kxH3HO
 #: src/modules/object-record/record-field/ui/form-types/components/FormCurrencyFieldInput.tsx
@@ -10166,6 +10301,8 @@ msgid "Note"
 msgstr "Note"
 
 #. js-lingui-id: 1DBGsz
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
 #: src/modules/page-layout/constants/StandardPageLayoutTabTitleTranslations.ts
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 msgid "Notes"
@@ -10636,6 +10773,12 @@ msgstr "Our team can help you set up your workspace to match your specific needs
 msgid "Outage"
 msgstr "Outage"
 
+#. js-lingui-id: EufvBx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+msgid "Outcome"
+msgstr "Outcome"
+
 #. js-lingui-id: gh06VD
 #: src/pages/settings/admin-panel/SettingsAdminNewAiModel.tsx
 #: src/modules/workflow/components/WorkflowStepExecutionResult.tsx
@@ -10920,6 +11063,8 @@ msgid "Permissions · {objectLabelSingular}"
 msgstr "Permissions · {objectLabelSingular}"
 
 #. js-lingui-id: zmwvG2
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
 #: src/modules/object-record/record-field/ui/meta-types/input/components/PhonesFieldInput.tsx
 msgid "Phone"
 msgstr "Phone"
@@ -12181,6 +12326,7 @@ msgid "SDK"
 msgstr "SDK"
 
 #. js-lingui-id: A1taO8
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
 #: src/modules/ui/navigation/navigation-drawer/components/NavigationDrawerHeader.tsx
 #: src/modules/ui/navigation/navigation-drawer/components/MultiWorkspaceDropdown/internal/MultiWorkspaceDropdownWorkspacesListComponents.tsx
 #: src/modules/ui/layout/dropdown/components/DropdownMenuSearchInput.tsx
@@ -12322,6 +12468,11 @@ msgstr "Search any field"
 #: src/modules/settings/roles/role-assignment/components/SettingsRoleAssignmentEntityPickerDropdown.tsx
 msgid "Search API keys"
 msgstr "Search API keys"
+
+#. js-lingui-id: oxPAQs
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+msgid "Search by NIPT"
+msgstr "Search by NIPT"
 
 #. js-lingui-id: yI4D/V
 #: src/modules/side-panel/pages/page-layout/components/dropdown-content/ChartColorSelectionDropdownContent.tsx
@@ -13518,9 +13669,15 @@ msgstr "Subject, body and attachments will be shared with your team."
 #. js-lingui-id: hQRttt
 #: src/modules/workflow/workflow-steps/workflow-actions/form-action/components/WorkflowEditActionFormFiller.tsx
 #: src/modules/spreadsheet-import/steps/components/ValidationStep/ValidationStep.tsx
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
 #: src/modules/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationVerification.tsx
 msgid "Submit"
 msgstr "Submit"
+
+#. js-lingui-id: fJQkJM
+#: src/modules/object-record/record-show/components/BusinessNiptOnCreateSection.tsx
+msgid "Submit saves NIPT to this company/business record."
+msgstr "Submit saves NIPT to this company/business record."
 
 #. js-lingui-id: EDl9kS
 #: src/modules/information-banner/components/billing/InformationBannerNoBillingSubscription.tsx
@@ -14445,6 +14602,11 @@ msgstr "Total"
 msgid "Total Available"
 msgstr "Total Available"
 
+#. js-lingui-id: 980ny2
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+msgid "Total calls"
+msgstr "Total calls"
+
 #. js-lingui-id: hg5QeV
 #: src/modules/ai/components/RoutingDebugDisplay.tsx
 #: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
@@ -14551,6 +14713,11 @@ msgstr "Triggers the function with Http request"
 #: src/modules/object-record/object-filter-dropdown/components/ObjectFilterDropdownBooleanSelect.tsx
 msgid "True"
 msgstr "True"
+
+#. js-lingui-id: ghMPak
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+msgid "Try another ID or confirm the business has logged activity."
+msgstr "Try another ID or confirm the business has logged activity."
 
 #. js-lingui-id: haaL9N
 #: src/pages/settings/workspace/SettingsApiWebhooks.tsx
@@ -15153,6 +15320,14 @@ msgstr "User"
 msgid "User Context"
 msgstr "User Context"
 
+#. js-lingui-id: 3bET8+
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+#: src/modules/settings/hooks/useSettingsNavigationItems.tsx
+msgid "User history"
+msgstr "User history"
+
 #. js-lingui-id: RNv3YS
 #: src/modules/settings/admin-panel/components/SettingsAdminGeneral.tsx
 msgid "User Impersonation"
@@ -15667,6 +15842,12 @@ msgstr "What can I help you with?"
 msgid "What this API can do: Select a user role to define its permissions."
 msgstr "What this API can do: Select a user role to define its permissions."
 
+#. js-lingui-id: 1ZF9KQ
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+#: src/pages/settings/crm/components/crm-call-logs-table.component.tsx
+msgid "When"
+msgstr "When"
+
 #. js-lingui-id: m7GziZ
 #: src/modules/ai/components/suggested-prompts/default-suggested-prompts.ts
 msgid "When a deal's stage changes to Closed Won, create a task assigned to the deal owner, due 7 days after the close date, with title \"Post-sale check-in\" and the company name in the description."
@@ -15793,6 +15974,9 @@ msgstr "Workflows"
 #: src/pages/settings/data-model/SettingsNewObject.tsx
 #: src/pages/settings/data-model/new-field/SettingsObjectNewFieldSelect.tsx
 #: src/pages/settings/data-model/new-field/SettingsObjectNewFieldConfigure.tsx
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+#: src/pages/settings/crm/SettingsCrmNiptHistory.tsx
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
 #: src/pages/settings/applications/SettingsAvailableApplicationDetails.tsx
 #: src/pages/settings/applications/SettingsApplications.tsx
 #: src/pages/settings/applications/SettingsApplications.tsx
@@ -15874,6 +16058,11 @@ msgstr "Workspace name"
 #: src/modules/object-record/object-options-dropdown/components/ObjectOptionsDropdownVisibilityContent.tsx
 msgid "Workspace views require manage views permission"
 msgstr "Workspace views require manage views permission"
+
+#. js-lingui-id: 3hQ1ah
+#: src/pages/settings/crm/SettingsCrmAdminDashboard.tsx
+msgid "Workspace-wide call outcomes and volume (all members)."
+msgstr "Workspace-wide call outcomes and volume (all members)."
 
 #. js-lingui-id: pmt7u4
 #: src/modules/settings/admin-panel/components/SettingsAdminGeneral.tsx
@@ -16110,6 +16299,11 @@ msgstr "Your enterprise key format is deprecated. Please activate a new key to k
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
 msgid "Your enterprise subscription has been canceled."
 msgstr "Your enterprise subscription has been canceled."
+
+#. js-lingui-id: IoFtN7
+#: src/pages/settings/crm/SettingsCrmUserHistory.tsx
+msgid "Your logged calls and interactions will show up here."
+msgstr "Your logged calls and interactions will show up here."
 
 #. js-lingui-id: 9ivpwk
 #: src/pages/settings/SettingsProfile.tsx
