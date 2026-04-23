@@ -1,0 +1,30 @@
+# Triggers a redeploy of your Railway backend service (same as clicking Redeploy
+# in the dashboard). Use after pushing backend/Docker changes to main.
+#
+# Required repository secrets:
+#   RAILWAY_TOKEN           — Railway account token (Dashboard → Account → Tokens)
+#   RAILWAY_PROJECT_ID      — Project ID (Project settings → General)
+#   RAILWAY_SERVICE_ID      — Backend service ID (Service → Settings → Service ID)
+
+name: Railway — redeploy backend
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: railway-redeploy-backend
+  cancel-in-progress: false
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Redeploy service
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+        run: >-
+          npx -y @railway/cli@4.40.2 redeploy
+          -s "${{ secrets.RAILWAY_SERVICE_ID }}"
+          -y

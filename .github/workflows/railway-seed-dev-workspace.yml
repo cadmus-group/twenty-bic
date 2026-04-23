@@ -1,0 +1,95 @@
+# Seeds demo workspace data against your Railway Postgres from GitHub runners
+# (enough RAM). Railway containers often OOM when running workspace:seed:dev.
+#
+# Required repository secrets (copy values from Railway backend service Variables):
+#   TWENTY_SEED_PG_DATABASE_URL   — same as PG_DATABASE_URL
+#   TWENTY_SEED_REDIS_URL         — same as REDIS_URL
+#   TWENTY_SEED_APP_SECRET        — same as APP_SECRET
+#
+# Optional (recommended to match production):
+#   TWENTY_SEED_SERVER_URL        — e.g. https://your-api.up.railway.app
+#   TWENTY_SEED_FRONTEND_URL      — e.g. https://your-front.up.railway.app
+
+name: Railway — seed dev workspace
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'light = Apple workspace only; full = Apple + Y Combinator'
+        type: choice
+        options:
+          - light
+          - full
+        default: light
+
+concurrency:
+  group: railway-seed-dev-workspace
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      NODE_ENV: production
+      PG_DATABASE_URL: ${{ secrets.TWENTY_SEED_PG_DATABASE_URL }}
+      REDIS_URL: ${{ secrets.TWENTY_SEED_REDIS_URL }}
+      APP_SECRET: ${{ secrets.TWENTY_SEED_APP_SECRET }}
+      SERVER_URL: ${{ secrets.TWENTY_SEED_SERVER_URL }}
+      FRONTEND_URL: ${{ secrets.TWENTY_SEED_FRONTEND_URL }}
+      PG_SSL_ALLOW_SELF_SIGNED: 'true'
+      MESSAGE_QUEUE_TYPE: bull-mq
+      CACHE_STORAGE_TYPE: redis
+      STORAGE_TYPE: local
+      IS_CONFIG_VARIABLES_IN_DB_ENABLED: 'false'
+      NODE_OPTIONS: --max-old-space-size=6144
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required secrets
+        env:
+          PG_DATABASE_URL: ${{ secrets.TWENTY_SEED_PG_DATABASE_URL }}
+          REDIS_URL: ${{ secrets.TWENTY_SEED_REDIS_URL }}
+          APP_SECRET: ${{ secrets.TWENTY_SEED_APP_SECRET }}
+        run: |
+          if [ -z "$PG_DATABASE_URL" ]; then
+            echo '::error::Add repository secret TWENTY_SEED_PG_DATABASE_URL (Railway PG_DATABASE_URL).'
+            exit 1
+          fi
+          if [ -z "$REDIS_URL" ]; then
+            echo '::error::Add repository secret TWENTY_SEED_REDIS_URL (Railway REDIS_URL).'
+            exit 1
+          fi
+          if [ -z "$APP_SECRET" ]; then
+            echo '::error::Add repository secret TWENTY_SEED_APP_SECRET (Railway APP_SECRET).'
+            exit 1
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build twenty-server (and dependencies)
+        run: npx nx run twenty-server:build
+
+      - name: Run workspace seed
+        working-directory: packages/twenty-server
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.mode }}" = "light" ]; then
+            node dist/command/command workspace:seed:dev --light
+          else
+            node dist/command/command workspace:seed:dev
+          fi
