@@ -5,9 +5,11 @@ import { CronRegisterAllCommand } from 'src/database/commands/cron-register-all.
 import { DataSeedWorkspaceCommand } from 'src/database/commands/data-seed-dev-workspace.command';
 import { ListOrphanedWorkspaceEntitiesCommand } from 'src/database/commands/list-and-delete-orphaned-workspace-entities.command';
 import { ConfirmationQuestion } from 'src/database/commands/questions/confirmation.question';
+import { UsersSeedCommand } from 'src/database/commands/users-seed.command';
 import { WorkspaceExportModule } from 'src/database/commands/workspace-export/workspace-export.module';
 import { UpgradeVersionCommandModule } from 'src/database/commands/upgrade-version-command/upgrade-version-command.module';
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
+import { UserEntity } from 'src/engine/core-modules/user/user.entity';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { GenerateApiKeyCommand } from 'src/engine/core-modules/api-key/commands/generate-api-key.command';
 import { MarketplaceModule } from 'src/engine/core-modules/application/application-marketplace/marketplace.module';
@@ -39,7 +41,7 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
 @Module({
   imports: [
     UpgradeVersionCommandModule,
-    TypeOrmModule.forFeature([WorkspaceEntity]),
+    TypeOrmModule.forFeature([WorkspaceEntity, UserEntity]),
     WorkspaceExportModule,
     // Cron command dependencies
     MessagingImportManagerModule,
@@ -76,6 +78,7 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     ListOrphanedWorkspaceEntitiesCommand,
     EnterpriseKeyValidationCronCommand,
     GenerateApiKeyCommand,
+    UsersSeedCommand,
   ],
 })
 export class DatabaseCommandModule {}

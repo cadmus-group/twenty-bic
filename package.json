@@ -199,6 +199,7 @@
     "deploy:check": "bash packages/twenty-utils/deploy-preflight.sh",
     "deploy:migrate": "bash packages/twenty-utils/deploy-preflight.sh && npx nx run twenty-server:database:migrate",
     "deploy:bootstrap": "bash packages/twenty-utils/deploy-bootstrap.sh",
+    "deploy:seed-admin": "bash packages/twenty-utils/deploy-seed-admin.sh",
     "deploy:start": "bash packages/twenty-utils/deploy-bootstrap.sh",
     "deploy:smoke": "bash packages/twenty-utils/deploy-smoke.sh",
     "deploy:pm2:start": "npx pm2@5 start packages/twenty-utils/ecosystem.config.js --env production",

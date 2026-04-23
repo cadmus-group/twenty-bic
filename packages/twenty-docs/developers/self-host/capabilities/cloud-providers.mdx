@@ -35,6 +35,25 @@ Deploy Twenty on Railway with the community maintained template below.
 
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/nAL3hA)
 
+If you want to seed an admin user after the first Railway deploy, set these env vars in the Railway service and run the release command:
+
+```bash
+yarn deploy:seed-admin
+```
+
+Required env vars:
+- `SEED_ADMIN_EMAIL`
+- `SEED_ADMIN_PASSWORD`
+
+Optional env vars:
+- `SEED_ADMIN_FIRST_NAME`
+- `SEED_ADMIN_LAST_NAME`
+- `SEED_ADMIN_LOCALE`
+- `SEED_ADMIN_WORKSPACE_ID` or `SEED_WORKSPACE_ID`
+- `SEED_ADMIN_IS_EMAIL_VERIFIED`
+- `SEED_ADMIN_CAN_IMPERSONATE`
+- `SEED_ADMIN_DRY_RUN`
+
 ### Twenty on Sealos
 
 Deploy Twenty on Sealos with the community maintained template below.
