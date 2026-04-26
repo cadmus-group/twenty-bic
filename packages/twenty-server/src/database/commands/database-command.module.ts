@@ -22,6 +22,7 @@ import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { PublicDomainModule } from 'src/engine/core-modules/public-domain/public-domain.module';
 import { TwentyConfigModule } from 'src/engine/core-modules/twenty-config/twenty-config.module';
+import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { WorkspaceModule } from 'src/engine/core-modules/workspace/workspace.module';
 import { DataSourceModule } from 'src/engine/metadata-modules/data-source/data-source.module';
@@ -64,6 +65,7 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     WorkspaceMigrationModule,
     TrashCleanupModule,
     PublicDomainModule,
+    UserWorkspaceModule,
     EventLogCleanupModule,
     EnterpriseModule,
     TwentyConfigModule,
