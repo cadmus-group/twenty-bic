@@ -121,6 +121,7 @@ export class UsersSeedCommand extends CommandRunner {
 
     let createdCount = 0;
     let existingCount = 0;
+    let updatedCount = 0;
     let attachedToWorkspaceCount = 0;
 
     for (const userToSeed of usersToSeed) {
@@ -133,24 +134,34 @@ export class UsersSeedCommand extends CommandRunner {
 
       const existingUser = await this.userRepository.findOneBy({ email });
 
-      const user =
-        existingUser ??
-        (await this.createUserIfNeeded({
-          userToSeed,
-          email,
-          defaultPassword,
-          dryRun,
-        }));
+      const user = existingUser
+        ? await this.updateExistingUserIfNeeded({
+            existingUser,
+            userToSeed,
+            dryRun,
+          })
+        : await this.createUserIfNeeded({
+            userToSeed,
+            email,
+            defaultPassword,
+            dryRun,
+          });
 
       if (existingUser) {
         existingCount += 1;
-        this.logger.log(`User ${email} already exists`);
+
+        if (user.updated) {
+          updatedCount += 1;
+          this.logger.log(`Updated existing user ${email}`);
+        } else {
+          this.logger.log(`User ${email} already exists`);
+        }
       } else if (user) {
         createdCount += 1;
         this.logger.log(`Created user ${email}`);
       }
 
-      if (!workspace || !user) {
+      if (!workspace) {
         continue;
       }
 
@@ -163,7 +174,7 @@ export class UsersSeedCommand extends CommandRunner {
       }
 
       await this.userWorkspaceService.addUserToWorkspaceIfUserNotInWorkspace(
-        user,
+        user.user,
         workspace,
       );
 
@@ -172,7 +183,7 @@ export class UsersSeedCommand extends CommandRunner {
     }
 
     this.logger.log(
-      `User seed completed: ${createdCount} created, ${existingCount} already existing, ${attachedToWorkspaceCount} attached to workspace`,
+      `User seed completed: ${createdCount} created, ${updatedCount} updated, ${existingCount} already existing, ${attachedToWorkspaceCount} attached to workspace`,
     );
   }
 
@@ -186,7 +197,7 @@ export class UsersSeedCommand extends CommandRunner {
     email: string;
     defaultPassword?: string;
     dryRun: boolean;
-  }): Promise<UserEntity | null> {
+  }): Promise<{ user: UserEntity; updated: boolean }> {
     const resolvedPassword = userToSeed.password ?? defaultPassword;
 
     if (!resolvedPassword) {
@@ -198,11 +209,14 @@ export class UsersSeedCommand extends CommandRunner {
     if (dryRun) {
       this.logger.log(`[dry-run] Would create user ${email}`);
 
-      return this.userRepository.create({
-        email,
-        firstName: userToSeed.firstName ?? '',
-        lastName: userToSeed.lastName ?? '',
-      });
+      return {
+        user: this.userRepository.create({
+          email,
+          firstName: userToSeed.firstName ?? '',
+          lastName: userToSeed.lastName ?? '',
+        }),
+        updated: false,
+      };
     }
 
     const passwordHash = await hashPassword(resolvedPassword);
@@ -218,7 +232,90 @@ export class UsersSeedCommand extends CommandRunner {
       canImpersonate: userToSeed.canImpersonate ?? false,
     });
 
-    return this.userRepository.save(user);
+    return { user: await this.userRepository.save(user), updated: false };
+  }
+
+  private async updateExistingUserIfNeeded({
+    existingUser,
+    userToSeed,
+    dryRun,
+  }: {
+    existingUser: UserEntity;
+    userToSeed: SeedUser;
+    dryRun: boolean;
+  }): Promise<{ user: UserEntity; updated: boolean }> {
+    let hasChanges = false;
+
+    if (
+      userToSeed.firstName !== undefined &&
+      userToSeed.firstName !== existingUser.firstName
+    ) {
+      existingUser.firstName = userToSeed.firstName;
+      hasChanges = true;
+    }
+
+    if (
+      userToSeed.lastName !== undefined &&
+      userToSeed.lastName !== existingUser.lastName
+    ) {
+      existingUser.lastName = userToSeed.lastName;
+      hasChanges = true;
+    }
+
+    if (
+      userToSeed.locale !== undefined &&
+      userToSeed.locale !== existingUser.locale
+    ) {
+      existingUser.locale = userToSeed.locale;
+      hasChanges = true;
+    }
+
+    if (
+      userToSeed.isEmailVerified !== undefined &&
+      userToSeed.isEmailVerified !== existingUser.isEmailVerified
+    ) {
+      existingUser.isEmailVerified = userToSeed.isEmailVerified;
+      hasChanges = true;
+    }
+
+    if (
+      userToSeed.canAccessFullAdminPanel !== undefined &&
+      userToSeed.canAccessFullAdminPanel !==
+        existingUser.canAccessFullAdminPanel
+    ) {
+      existingUser.canAccessFullAdminPanel = userToSeed.canAccessFullAdminPanel;
+      hasChanges = true;
+    }
+
+    if (
+      userToSeed.canImpersonate !== undefined &&
+      userToSeed.canImpersonate !== existingUser.canImpersonate
+    ) {
+      existingUser.canImpersonate = userToSeed.canImpersonate;
+      hasChanges = true;
+    }
+
+    if (userToSeed.password !== undefined) {
+      existingUser.passwordHash = await hashPassword(userToSeed.password);
+      hasChanges = true;
+    }
+
+    if (!hasChanges) {
+      return { user: existingUser, updated: false };
+    }
+
+    if (dryRun) {
+      this.logger.log(
+        `[dry-run] Would update existing user ${existingUser.email}`,
+      );
+
+      return { user: existingUser, updated: true };
+    }
+
+    return {
+      user: await this.userRepository.save(existingUser),
+      updated: true,
+    };
   }
 
   private parseUsersFromInput(options: UsersSeedCommandOptions): SeedUser[] {
