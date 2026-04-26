@@ -40,6 +40,7 @@ const ALLOWED_CORS_HEADERS = [
   'Content-Type',
   'Accept',
   'Authorization',
+  'x-locale',
   'apollo-require-preflight',
   'x-apollo-operation-name',
 ];
