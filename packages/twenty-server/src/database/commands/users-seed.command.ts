@@ -112,7 +112,7 @@ export class UsersSeedCommand extends CommandRunner {
       : null;
 
     if (workspaceId && !workspace) {
-      throw new Error([Workspace not found: ${workspaceId}](http://_vscodecontentref_/0));
+      throw new Error(`Workspace not found: ${workspaceId}`);
     }
 
     this.logger.log(
