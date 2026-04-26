@@ -309,13 +309,17 @@ export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
     if (
       workspace.activationStatus === WorkspaceActivationStatus.ONGOING_CREATION
     ) {
-      throw new Error('Workspace is already being created');
+      throw new BadRequestException(
+        'Workspace creation is already in progress. Wait a minute and refresh; if it persists, reset activationStatus in the database or contact support.',
+      );
     }
 
     if (
       workspace.activationStatus !== WorkspaceActivationStatus.PENDING_CREATION
     ) {
-      throw new Error('Workspace is not pending creation');
+      throw new BadRequestException(
+        `This workspace cannot be activated because its status is "${workspace.activationStatus}" (expected "${WorkspaceActivationStatus.PENDING_CREATION}"). If you used the dev seed, sign in with a seeded user (e.g. tim@apple.dev) and skip onboarding. If you are a new user, sign out and create a fresh account, or ask an admin to fix a stuck workspace.`,
+      );
     }
 
     await this.workspaceRepository.update(workspace.id, {
