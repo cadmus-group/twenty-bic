@@ -2,6 +2,7 @@ import { type LogLevel } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { type NestExpressApplication } from '@nestjs/platform-express';
 
+import type { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 
 import bytes from 'bytes';
@@ -60,8 +61,38 @@ const isAllowedCorsOrigin = (
   allowedOrigins: string[],
 ): boolean => allowedOrigins.includes(new URL(requestOrigin).origin);
 
+const buildAccessControlAllowHeadersValue = (
+  request: Pick<Request, 'headers'>,
+): string => {
+  const requestedRaw = request.headers['access-control-request-headers'];
+  const requestedParts =
+    typeof requestedRaw === 'string' && requestedRaw.length > 0
+      ? requestedRaw
+          .split(',')
+          .map((part) => part.trim())
+          .filter((part) => part.length > 0)
+      : [];
+
+  const byLowerCase = new Map<string, string>();
+
+  for (const allowed of ALLOWED_CORS_HEADERS) {
+    byLowerCase.set(allowed.toLowerCase(), allowed);
+  }
+
+  for (const requested of requestedParts) {
+    const lower = requested.toLowerCase();
+
+    if (!byLowerCase.has(lower)) {
+      byLowerCase.set(lower, requested);
+    }
+  }
+
+  return [...byLowerCase.values()].join(', ');
+};
+
 const applyCorsHeaders = (
-  response: { header: (name: string, value: string) => void },
+  request: Pick<Request, 'headers'>,
+  response: Response,
   requestOrigin: string,
 ) => {
   response.header('Access-Control-Allow-Origin', requestOrigin);
@@ -72,7 +103,7 @@ const applyCorsHeaders = (
   );
   response.header(
     'Access-Control-Allow-Headers',
-    ALLOWED_CORS_HEADERS.join(', '),
+    buildAccessControlAllowHeadersValue(request),
   );
   response.header('Vary', 'Origin');
 };
@@ -129,14 +160,14 @@ const bootstrap = async () => {
   const twentyConfigService = app.get(TwentyConfigService);
   const allowedCorsOrigins = getAllowedCorsOrigins(twentyConfigService);
 
-  app.use((request, response, next) => {
+  app.use((request: Request, response: Response, next: NextFunction) => {
     const requestOrigin = request.headers.origin;
 
     if (
       isDefined(requestOrigin) &&
       isAllowedCorsOrigin(requestOrigin, allowedCorsOrigins)
     ) {
-      applyCorsHeaders(response, requestOrigin);
+      applyCorsHeaders(request, response, requestOrigin);
 
       if (request.method === 'OPTIONS') {
         response.sendStatus(204);
